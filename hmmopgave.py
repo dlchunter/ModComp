@@ -1,8 +1,9 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
 gamma = 0.1
 beta = 0.2
 alpha = 0.9
@@ -92,3 +93,16 @@ plt.scatter(range(len(Clist)), Clist, color='red', label='C',
 plt.title('Poisson Samples (X) with C Values')
 plt.legend()
 plt.show()
+
+X_train, X_test, C_train, C_test = train_test_split(Xlist, Clist, test_size=0.2, random_state=42)
+X_train = np.array(X_train).reshape(-1, 1)
+X_test = np.array(X_test).reshape(-1, 1)
+# Multiclass logistic regression (automatically induced when logisticregression is used with more than 2 classes) using the X values as features and C values as labels
+model = LogisticRegression(solver='lbfgs')
+model.fit(X_train, C_train)
+predicted_classes = model.predict(X_test)
+print("Predicted classes: ", predicted_classes)
+print("Classification Report:\n", classification_report(C_test, predicted_classes))
+print("Confusion Matrix:\n", confusion_matrix(C_test, predicted_classes))
+mean_squared_error = np.mean((predicted_classes - C_test) ** 2)
+print("Mean Squared Error: ", mean_squared_error)
