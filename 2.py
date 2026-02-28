@@ -39,22 +39,22 @@ def moveForward(state):
 
 # Simulate the for n neurons, starting (always) from state 2, and save the resulting states after T time-steps
 startstate = 2
-neuronlist = []
-neuronslist = []
+cstatelist = []
+cstateslist = []
 for i in range(n):
     state = startstate
     # Move n steps forward and save state
     for t in range(T):
         state = moveForward(state)
-        neuronlist.append(state)
+        cstatelist.append(state)
         #print(f"Neuron {i}, Time {t}, State: {state}")
     # Add the state to the list
-    neuronslist.append(neuronlist)
+    cstateslist.append(cstatelist)
 zlists = []
 # Generate z values for each neuron based on the observed states in Clist
 for i in range(n):
     Zlist = []
-    for c in neuronslist[i]:
+    for c in cstateslist[i]:
         match c:
             case 0:
                 if random.random() < 1-alpha:
@@ -94,7 +94,6 @@ for i in range(n):
     plt.plot(Xlists[i], label=f'X Neuron {i}')
     plt.scatter(range(len(Xlists[i])), Xlists[i], color='blue', label=f'X Neuron {i}', alpha=0.5)
     plt.title(f'Poisson Samples (X) for Neuron {i}')
-plt.tight_layout()
 plt.show()
 
 # Plot mean of all neurons with mean curve and scatter plot
