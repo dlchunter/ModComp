@@ -17,7 +17,7 @@ state2probs = [beta/2, beta/2, 1-beta]
 Gamma = np.matrix([state0probs, state1probs, state2probs])
 
 n = 10
-T = 100
+T = 10000
 
 C1 = 2
 Clist = [C1]
@@ -104,5 +104,6 @@ predicted_classes = model.predict(X_test)
 print("Predicted classes: ", predicted_classes)
 print("Classification Report:\n", classification_report(C_test, predicted_classes))
 print("Confusion Matrix:\n", confusion_matrix(C_test, predicted_classes))
+# Mean squared error asymptotically approaches approx 1.21 as T increases.
 mean_squared_error = np.mean((predicted_classes - C_test) ** 2)
 print("Mean Squared Error: ", mean_squared_error)
