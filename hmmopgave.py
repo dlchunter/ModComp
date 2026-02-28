@@ -43,6 +43,7 @@ for i in range(T):
     # Add the state to the list
     Clist.append(state)
 
+# Generate z values based on the observed states in Clist
 for c in Clist:
     match c:
         case 0:
@@ -61,7 +62,9 @@ for c in Clist:
             else:
                 Zlist.append(0)
 
+# Generate lambda values based on the z values
 lambdalist = [l0 if z == 0 else l1 for z in Zlist]
+# Generate Poisson samples based on the mean of the lambda values
 meanlambdalist = np.mean(lambdalist)
 Xlist = [np.random.poisson(lambd) for lambd in lambdalist]
 print("Poisson samples: ", Xlist)
