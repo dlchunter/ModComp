@@ -71,13 +71,12 @@ print("C states generated for each neuron: ", len(cstateslist), len(cstateslist[
 print("Z values generated for each neuron: ", len(zlists), len(zlists[0]))
 # Add lambda for each neuron based on the z values
 print("Lambda values generated for each neuron: ", len(lambdalists), len(lambdalists[0]))
-# Generate Poisson samples based on the mean of the lambda values
-meanlambdalist = np.mean(lambdalists[0])  # Use the first neuron's lambda list for mean calculation
+# Generate poisson samples for each neuron based on the lambda values
 Xlists = []
-for i in range(n):
-    Xlist = np.random.poisson(lam=meanlambdalist, size=T)
+for lambdalist in lambdalists:
+    Xlist = np.random.poisson(lam=lambdalist)
     Xlists.append(Xlist)
-print("Poisson samples: ", len(Xlists), len(Xlists[0]))
+print("X values generated for each neuron: ", len(Xlists), len(Xlists[0]))
 
 # Plot X values for different neurons in different subplots
 plt.figure(figsize=(12, 6))
