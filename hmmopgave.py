@@ -4,20 +4,23 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
+
+# Basic constants
 gamma = 0.1
 beta = 0.2
 alpha = 0.9
 l0 = 1
 l1 = 5
 
+n = 100
+T = 1000
+# Define rows of probabilities:
 state0probs = [1-gamma,0,gamma]
 state1probs = [0,1-gamma,gamma]
 state2probs = [beta/2, beta/2, 1-beta]
 
+# Make Gamma matrix of probabilities:
 Gamma = np.matrix([state0probs, state1probs, state2probs])
-
-n = 10
-T = 100
 
 C1 = 2
 Clist = [C1]
@@ -34,13 +37,12 @@ def moveForward(state):
     else:
         return 0 if random.random() < state2probs[0] else (1 if random.random() < state2probs[1] else 2)
 
-
-# Simulate the process T times, starting (always) from state 2, and save the resulting states after n steps
+# Simulate the for n neurons, starting (always) from state 2, and save the resulting states after T time-steps
 startstate = 2
-for i in range(T):
+for i in range(n):
     state = startstate
     # Move n steps forward and save state
-    for t in range(n):
+    for t in range(T):
         state = moveForward(state)
     # Add the state to the list
     Clist.append(state)
