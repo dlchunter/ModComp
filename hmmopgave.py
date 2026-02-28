@@ -1,5 +1,7 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 gamma = 0.1
 beta = 0.2
@@ -30,7 +32,6 @@ def moveForward(state):
         return 1 if random.random() < state1probs[1] else 2
     else:
         return 0 if random.random() < state2probs[0] else (1 if random.random() < state2probs[1] else 2)
-
 
 
 # Simulate the process T times, starting (always) from state 2, and save the resulting states after n steps
@@ -68,3 +69,26 @@ lambdalist = [l0 if z == 0 else l1 for z in Zlist]
 meanlambdalist = np.mean(lambdalist)
 Xlist = [np.random.poisson(lambd) for lambd in lambdalist]
 print("Poisson samples: ", Xlist)
+
+# Visualize all samples of X,Z,C in one plot
+plt.figure(figsize=(12, 6))
+plt.subplot(3, 1, 1)
+plt.plot(Xlist, label='X')
+plt.title('Poisson Samples (X)')
+plt.subplot(3, 1, 2)
+plt.plot(Zlist, label='Z', color='orange')
+plt.title('Z Values')
+plt.subplot(3, 1, 3)
+plt.plot(Clist, label='C', color='green')
+plt.title('C Values')
+plt.tight_layout()
+plt.show()
+
+# Plot c-values on top of the x-values
+plt.figure(figsize=(12, 6))
+plt.plot(Xlist, label='X')
+plt.scatter(range(len(Clist)), Clist, color='red', label='C',
+            alpha=0.5)
+plt.title('Poisson Samples (X) with C Values')
+plt.legend()
+plt.show()
