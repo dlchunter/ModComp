@@ -17,7 +17,7 @@ state2probs = [beta/2, beta/2, 1-beta]
 Gamma = np.matrix([state0probs, state1probs, state2probs])
 
 n = 10
-T = 10000
+T = 100
 
 C1 = 2
 Clist = [C1]
@@ -107,3 +107,12 @@ print("Confusion Matrix:\n", confusion_matrix(C_test, predicted_classes))
 # Mean squared error asymptotically approaches approx 1.21 as T increases.
 mean_squared_error = np.mean((predicted_classes - C_test) ** 2)
 print("Mean Squared Error: ", mean_squared_error)
+
+# Plot the predicted classes vs the true classes
+plt.figure(figsize=(12, 6))
+plt.scatter(range(len(C_test)), C_test, color='blue', label='True Classes',
+            alpha=0.5)
+plt.scatter(range(len(predicted_classes)), predicted_classes, color='red', label='Predicted Classes', alpha=0.5)
+plt.title('True Classes vs Predicted Classes')
+plt.legend()
+plt.show()
