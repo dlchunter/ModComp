@@ -12,8 +12,8 @@ alpha = 0.9
 l0 = 1
 l1 = 5
 
-n = 100
-T = 1000
+n = 10
+T = 100
 # Define rows of probabilities:
 state0probs = [1-gamma,0,gamma]
 state1probs = [0,1-gamma,gamma]
@@ -39,12 +39,17 @@ def moveForward(state):
 
 # Simulate the for n neurons, starting (always) from state 2, and save the resulting states after T time-steps
 startstate = 2
+neuronlist = []
+neuronslist = []
 for i in range(n):
     state = startstate
     # Move n steps forward and save state
     for t in range(T):
         state = moveForward(state)
+        neuronlist.append(state)
+        #print(f"Neuron {i}, Time {t}, State: {state}")
     # Add the state to the list
+    neuronslist.append(neuronlist)
     Clist.append(state)
 
 # Generate z values based on the observed states in Clist
@@ -77,6 +82,7 @@ print("Poisson samples: ", Xlist)
 plt.figure(figsize=(12, 6))
 plt.subplot(3, 1, 1)
 plt.plot(Xlist, label='X')
+plt.scatter(range(len(Xlist)), Xlist, color='blue', label='X', alpha=0.5)
 plt.title('Poisson Samples (X)')
 plt.subplot(3, 1, 2)
 plt.plot(Zlist, label='Z', color='orange')
@@ -90,10 +96,17 @@ plt.show()
 # Plot c-values on top of the x-values
 plt.figure(figsize=(12, 6))
 plt.plot(Xlist, label='X')
-plt.scatter(range(len(Clist)), Clist, color='red', label='C',
-            alpha=0.5)
+plt.scatter(range(len(Xlist)), Xlist, color='blue', label='X', alpha=0.5)
+# Plot clist on top of xlist with different colors for each c value 
+colors = ['green' if c == 0 else 'red' if c == 1 else 'cyan' for c in Clist]
+plt.scatter(range(len(Clist)), Clist, color=colors, label='C', alpha=0.5)
 plt.title('Poisson Samples (X) with C Values')
-plt.legend()
+# add legend for the colors
+import matplotlib.patches as mpatches
+green_patch = mpatches.Patch(color='green', label='C=0')
+red_patch = mpatches.Patch(color='red', label='C=1')
+cyan_patch = mpatches.Patch(color='cyan', label='C=2')
+plt.legend(handles=[green_patch, red_patch, cyan_patch])
 plt.show()
 
 X_train, X_test, C_train, C_test = train_test_split(Xlist, Clist, test_size=0.2, random_state=42)
@@ -117,4 +130,17 @@ plt.scatter(range(len(C_test)), C_test, color='blue', label='True Classes',
 plt.scatter(range(len(predicted_classes)), predicted_classes, color='red', label='Predicted Classes', alpha=0.5)
 plt.title('True Classes vs Predicted Classes')
 plt.legend()
+plt.show()
+
+# Plot the different neurons in different subplots to visualize their state changes over time
+plt.figure(figsize=(12, 6))
+for i in range(min(10, n)):  # Plot only the first 10 neurons
+    plt.subplot(5, 2, i + 1)
+    plt.plot(neuronslist[i], label=f'Neuron {i}')
+    plt.title(f'Neuron {i} State Changes Over Time')
+    plt.xlabel('Time Steps')
+    plt.ylabel('State')
+    plt.ylim(-0.5, 2.5)
+    plt.legend()
+plt.tight_layout()
 plt.show()
